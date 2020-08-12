@@ -4,7 +4,7 @@ from osproc import execCmd, execCmdEx
 from sequtils import mapIt
 from strformat import `&`
 from strutils import `%`, strip, parseFloat, splitLines, join, split, parseInt
-from terminal import ForegroundColor, styledWriteLine, resetStyle
+from terminal import ForegroundColor, styledWriteLine, styledEcho, resetStyle
 
 from ./fs import readConfig
 
@@ -26,20 +26,28 @@ proc outputTestResult(index: int, actual, expected: string, elapsed,
     actual = actual.strip
     expected = expected.strip
 
-  var detail = ""
+  var detail: proc() = proc() =
+    discard
   if actual != expected:
-    stdout.styledWriteLine fgRed, "[WA]"
-    detail = "Expected:\n" & expected & "\n\nActual:\n" & actual & "\n"
+    styledEcho fgRed, "[WA]"
+    detail = proc() =
+      echo "Expected:"
+      styledEcho fgGreen, expected
+      echo ""
+      echo "Actual:"
+      styledEcho fgRed, actual
   elif elapsed.isSome and config.isSome and elapsed.get.parseFloat * 1000 >
       config.get[0]:
-    stdout.styledWriteLine fgYellow, "[TLE]"
-    detail = "Time limit: " & $(config.get[0] / 1000) & " sec\n"
+    styledEcho fgYellow, "[TLE]"
+    detail = proc() =
+      styledEcho fgRed, "Time limit: " & $(config.get[0] / 1000) & " sec"
   elif usedMem.isSome and config.isSome and usedMem.get.parseFloat / 1000 >
       config.get[1]:
-    stdout.styledWriteLine fgYellow, "[MLE]"
-    detail = "Memory limit: " & $config.get[1] & " MB\n"
+    styledEcho fgYellow, "[MLE]"
+    detail = proc() =
+      styledEcho fgRed, "Memory limit: " & $config.get[1] & " MB"
   else:
-    stdout.styledWriteLine fgGreen, "[AC]"
+    styledEcho fgGreen, "[AC]"
     result = true
 
   if elapsed.isSome:
@@ -47,7 +55,8 @@ proc outputTestResult(index: int, actual, expected: string, elapsed,
   if usedMem.isSome:
     echo &"Memory used: {usedMem.get.parseFloat / 1000} MB"
 
-  echo detail
+  detail()
+  echo ""
 
 proc doTest*(dir, contestId, problem, gnuTime: string) =
   let
@@ -104,7 +113,7 @@ proc doTest*(dir, contestId, problem, gnuTime: string) =
         failedSamples.add i+1
 
   if failedSamples.len != 0:
-    stdout.styledWriteLine fgRed, "Failed samples: ", resetStyle,
+    styledEcho fgRed, "Failed samples: ", resetStyle,
         failedSamples.mapIt($it).join(", ")
   else:
-    stdout.styledWriteLine fgGreen, "All samples passed."
+    styledEcho fgGreen, "All samples passed."
