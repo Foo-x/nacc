@@ -2,7 +2,7 @@
 
 version       = "0.1.0"
 author        = "Foo-x"
-description   = "A Nim AtCoder command line tools"
+description   = "A Nim AtCoder command line tool"
 license       = "MIT"
 srcDir        = "src"
 binDir        = "bin"
