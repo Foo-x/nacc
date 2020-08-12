@@ -54,7 +54,7 @@ proc doTest*(dir, contestId, problem, gnuTime: string) =
     targetDir = dir / contestId / problem
     target = targetDir / "main.nim"
   if not existsFile target:
-    stderr.styledWriteLine fgRed, &"{contestId}-{problem}: not found"
+    stderr.styledWriteLine fgRed, &"{contestId}/{problem}: not found"
     return
 
   let
