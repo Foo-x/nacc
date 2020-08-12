@@ -7,6 +7,7 @@ from terminal import ForegroundColor, TerminalCmd, styledWriteLine
 from ./client import fetch
 from ./parser import parseProblems, parseProblem
 from ./fs import createContestDir
+from ./test import doTest
 
 const
   problemsUrl = "https://atcoder.jp/contests/$1/tasks"
@@ -27,6 +28,11 @@ proc newCmd*(dir: string = "./", contestId: seq[string]): int =
 
     createContestDir dir, contestId, problems
   except:
-    styledWriteLine stderr, fgRed, &"failed with '{contestId}':"
-    styledWriteLine stderr, fgRed, getCurrentExceptionMsg()
-    styledWriteLine stderr, fgRed, getStackTrace()
+    styledWriteLine stderr, fgRed, &"failed for '{contestId}'"
+
+proc testCmd*(dir: string = "./", gnuTime: string = "/usr/bin/time", problem: seq[string]): int =
+  if problem.len < 1:
+    styledWriteLine stderr, fgRed, "error: missing required argument 'contestId problem'"
+    return 1
+
+  doTest(dir, problem[0], problem[1], gnuTime)
