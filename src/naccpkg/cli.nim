@@ -15,8 +15,8 @@ const
 
 proc newCmd*(dir: string = "./", contestId: seq[string]): int =
   if contestId.len == 0:
-    styledWriteLine stderr, fgRed, "error: missing required argument"
-    styledWriteLine stderr, fgRed, "nacc new contestId"
+    styledWriteLine stderr, fgRed, "Missing required argument."
+    styledWriteLine stderr, fgRed, "Usage: nacc new contestId"
     return 1
 
   let contestId = contestId[0]
@@ -29,12 +29,12 @@ proc newCmd*(dir: string = "./", contestId: seq[string]): int =
 
     createContestDir dir, contestId, problems
   except:
-    styledWriteLine stderr, fgRed, &"failed for '{contestId}'"
+    styledWriteLine stderr, fgRed, &"Failed for contestId: {contestId}"
 
 proc testCmd*(dir: string = "./", gnuTime: string = "/usr/bin/time", problem: seq[string]): int =
   if problem.len < 2:
-    styledWriteLine stderr, fgRed, "error: missing required arguments"
-    styledWriteLine stderr, fgRed, "nacc test contestId problem"
+    styledWriteLine stderr, fgRed, "Missing required arguments."
+    styledWriteLine stderr, fgRed, "Usage: nacc test contestId problem"
     return 1
 
   doTest(dir, problem[0], problem[1], gnuTime)
