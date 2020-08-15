@@ -1,5 +1,5 @@
 from sequtils import map, mapIt, filter, filterIt
-from strutils import split, endsWith, replace, parseInt, strip, contains
+from strutils import split, endsWith, replace, parseFloat, parseInt, strip, contains
 from xmltree import XmlNode, attr, innerText
 
 from nimquery import querySelector, querySelectorAll, parseHtmlQuery, exec
@@ -25,10 +25,10 @@ proc parsePartialProblemInfo(row: XmlNode): PartialProblemInfo =
     timeLimitStr = row.querySelector("td:nth-of-type(3)").innerText
     timeLimit =
       if timeLimitStr.endsWith(" msec"):
-        timeLimitStr.replace(" msec", "").parseInt
+        timeLimitStr.replace(" msec", "").parseFloat
       else:
-        timeLimitStr.replace(" sec", "").parseInt * 1000
-  result.timeLimit = timeLimit
+        timeLimitStr.replace(" sec", "").parseFloat * 1000
+  result.timeLimit = timeLimit.toInt
 
   let
     memoryLimitStr = row.querySelector("td:nth-of-type(4)").innerText
