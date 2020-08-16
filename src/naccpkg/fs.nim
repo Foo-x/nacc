@@ -4,7 +4,7 @@ from parsecfg import newConfig, setSectionKey, writeConfig, loadConfig, getSecti
 from strutils import replace, parseFloat
 from strformat import `&`
 from sequtils import toSeq
-from terminal import ForegroundColor, styledWriteLine
+from terminal import ForegroundColor, styledWriteLine, styledEcho
 
 const
   configFileName = "problem.cfg"
@@ -41,6 +41,8 @@ proc createContestDir*(dir: string, contestId: string, problemInfos: openArray[P
     for i in 0..<p.inputs.len:
       writeFile samplesDir / &"{i+1}.in", p.inputs[i]
       writeFile samplesDir / &"{i+1}.out", p.outputs[i]
+
+  styledEcho fgGreen, &"Created successful."
 
 proc readConfig*(dir, contestId, problem: string): Option[tuple[timeLimit,
     memoryLimit: float]] =

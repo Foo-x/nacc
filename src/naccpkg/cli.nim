@@ -33,6 +33,11 @@ proc newCmd*(dir: string = "./", contestId: seq[string]): int =
     stderr.styledWriteLine fgRed, "Usage: nacc new contestId"
     return 1
 
+  if not waitFor isLoggedIn():
+    let code = loginCmd()
+    if code != 0:
+      return code
+
   let contestId = contestId[0]
   try:
     let
@@ -43,7 +48,7 @@ proc newCmd*(dir: string = "./", contestId: seq[string]): int =
 
     createContestDir dir, contestId, problems
   except:
-    stderr.styledWriteLine fgRed, &"Failed for contestId: {contestId}"
+    stderr.styledWriteLine fgRed, &"Failed with contestId: {contestId}"
 
 proc testCmd*(dir: string = "./", gnuTime: string = "/usr/bin/time", problem: seq[string]): int =
   if problem.len < 2:

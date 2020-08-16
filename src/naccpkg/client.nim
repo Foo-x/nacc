@@ -16,13 +16,16 @@ const
   submitUrl = &"{baseUrl}contests/abc001/submit"
 
 let client = newAsyncHttpClient(maxRedirects = 0)
-client.headers = loadSession()
 
 proc fetch*(url: string): Future[XmlNode] {.async.} =
+  client.headers = loadSession()
+
   let response = await client.get url
   return parseHtml await response.body
 
 proc isLoggedIn*(): Future[bool] {.async.} =
+  client.headers = loadSession()
+
   let response = await client.get(submitUrl)
   return response.code != HttpCode(302)
 
@@ -31,6 +34,8 @@ proc validate(response: AsyncResponse) =
     raise newException(HttpRequestError, $response.code)
 
 proc getCsrfToken(): Future[string] {.async.} =
+  client.headers = loadSession()
+
   let response = await client.get(loginUrl)
   response.validate()
 
