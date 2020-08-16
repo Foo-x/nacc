@@ -17,6 +17,9 @@ type
     timeLimit: Natural
     memoryLimit: Natural
 
+proc parseCsrfToken*(tree: XmlNode): string =
+  tree.querySelector("""[name="csrf_token"]""").attr("value")
+
 proc parsePartialProblemInfo(row: XmlNode): PartialProblemInfo =
   new(result)
   result.problem = aQuery.exec(row, true)[0].attr("href").split("/")[^1]
