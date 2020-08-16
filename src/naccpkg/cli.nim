@@ -4,6 +4,7 @@ from strutils import `%`
 from sequtils import mapIt
 from terminal import ForegroundColor, TerminalCmd, styledWriteLine, readPasswordFromStdin
 
+from ./browser import openProblems, openProblem, openAnswer
 from ./client import fetch, login, isLoggedIn
 from ./parser import parseProblems, parseProblem
 from ./fs import createContestDir
@@ -57,3 +58,22 @@ proc testCmd*(dir: string = "./", gnuTime: string = "/usr/bin/time", problem: se
     return 1
 
   doTest(dir, problem[0], problem[1], gnuTime)
+
+proc openCmd*(problem: seq[string]): int =
+  if problem.len == 0:
+    stderr.styledWriteLine fgRed, "Missing required arguments."
+    stderr.styledWriteLine fgRed, "Usage:"
+    stderr.styledWriteLine fgRed, "nacc test <contestId>"
+    stderr.styledWriteLine fgRed, "nacc test <contestId> <problem>"
+    stderr.styledWriteLine fgRed, "nacc test <contestId> answer"
+    return 1
+
+  if problem.len == 1:
+    openProblems(problem[0])
+    return
+
+  if problem[1] == "answer":
+    openAnswer(problem[0])
+    return
+
+  openProblem(problem[0], problem[1])
