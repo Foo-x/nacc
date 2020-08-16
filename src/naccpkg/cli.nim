@@ -31,7 +31,7 @@ proc loginCmd*(): int =
 proc newCmd*(dir: string = "./", contestId: seq[string]): int =
   if contestId.len == 0:
     stderr.styledWriteLine fgRed, "Missing required argument."
-    stderr.styledWriteLine fgRed, "Usage: nacc new contestId"
+    stderr.styledWriteLine fgRed, "Usage: nacc new <contestId>"
     return 1
 
   if not waitFor isLoggedIn():
@@ -54,7 +54,7 @@ proc newCmd*(dir: string = "./", contestId: seq[string]): int =
 proc testCmd*(dir: string = "./", gnuTime: string = "/usr/bin/time", problem: seq[string]): int =
   if problem.len < 2:
     stderr.styledWriteLine fgRed, "Missing required arguments."
-    stderr.styledWriteLine fgRed, "Usage: nacc test contestId problem"
+    stderr.styledWriteLine fgRed, "Usage: nacc test <contestId> <problem>"
     return 1
 
   doTest(dir, problem[0], problem[1], gnuTime)
