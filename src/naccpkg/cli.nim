@@ -25,6 +25,7 @@ proc loginCmd*(): int =
     waitFor login(username, password)
   except:
     stderr.styledWriteLine fgRed, &"Login failed: {getCurrentExceptionMsg()}"
+    return 1
 
 proc newCmd*(dir: string = "./", contestId: seq[string]): int =
   if contestId.len == 0:

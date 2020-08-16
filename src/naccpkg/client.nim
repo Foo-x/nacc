@@ -51,4 +51,4 @@ proc login*(username, password: string): Future[void] {.async.} =
     saveSession response.headers
     styledEcho fgGreen, "Login successful."
   else:
-    stderr.styledWriteLine fgRed, "Login failed: invalid username or password"
+    raise newException(HttpRequestError, "invalid username or password")
