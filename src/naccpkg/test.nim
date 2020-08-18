@@ -95,7 +95,7 @@ proc doTest*(dir, contestId, problem, gnuTime: string) =
   var failedSamples = newSeq[int]()
   for i in 0..<inputs.len:
     let
-      result = execCmdEx(&"{timeCmd} {outBin} < {inputs[i]}")[0].strip
+      result = execCmdEx(&"""{timeCmd} echo "$({outBin} < {inputs[i]})"""")[0].strip
       resultLines = result.splitLines()
       expected = readFile outputs[i]
 
