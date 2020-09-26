@@ -63,9 +63,9 @@ proc openCmd*(problem: seq[string]): int =
   if problem.len == 0:
     stderr.styledWriteLine fgRed, "Missing required arguments."
     stderr.styledWriteLine fgRed, "Usage:"
-    stderr.styledWriteLine fgRed, "nacc test <contestId>"
-    stderr.styledWriteLine fgRed, "nacc test <contestId> <problem>"
-    stderr.styledWriteLine fgRed, "nacc test <contestId> answer"
+    stderr.styledWriteLine fgRed, "nacc open <contestId>"
+    stderr.styledWriteLine fgRed, "nacc open <contestId> <problem>"
+    stderr.styledWriteLine fgRed, "nacc open <contestId> answer"
     return 1
 
   if problem.len == 1:
